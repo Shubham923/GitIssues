@@ -4,55 +4,52 @@ import android.util.Log
 import androidx.paging.PageKeyedDataSource
 import com.shubham.gitissues.app.App
 import com.shubham.gitissues.model.response.GitIssueResponse
-import com.shubham.gitissues.model.response.Response
+import com.shubham.gitissues.model.response.GitRepoResponse
 import io.reactivex.Completable
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-
-class GitIssueDataSource(private val apiService: RemoteApiService,
-                         private val compositeDisposable: CompositeDisposable
-) : PageKeyedDataSource<Int, GitIssueResponse>(){
+class GitRepoDataSource(private val apiService: RemoteApiService,
+                        private val compositeDisposable: CompositeDisposable
+) : PageKeyedDataSource<Int, GitRepoResponse>(){
 
 
     private var retrycompletable : Completable? = null
     override fun loadInitial(
         params: LoadInitialParams<Int>,
-        callback: LoadInitialCallback<Int, GitIssueResponse>   //GitissueResponse was there
+        callback: LoadInitialCallback<Int, GitRepoResponse>   //GitissueResponse was there
     ) {
-        val repoName  = App.getRepositoryName()
-        if (repoName != null) {
-            Log.d("xyz-called", repoName)
-        }
+        Log.d("xyz", "I am Called")
         compositeDisposable.add(
-            apiService.pullAlltheIssues(repoName,App.getAPIToken(),App.getMediaType(),1,params.requestedLoadSize)
+            apiService.pullAlltheRepos(App.getAPIToken(), App.getMediaType(),1,params.requestedLoadSize)
                 .subscribe(
                     { response ->
 
-                        Log.d("abc", response.toString())
+                        Log.d("abcd", response.toString())
                         callback.onResult(response,
                             null,
                             2
                         )
                     },
                     {
+                        Log.d("failing", it.localizedMessage)
                         //setRetry(Action { loadInitial(params, callback) })
                     }
                 )
         )
     }
 
-    override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, GitIssueResponse>) {
+    override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, GitRepoResponse>) {
 
-        val repoName = /*App.getRepositoryName()*/ "git-consortium"
+        val repoName = "Spoon-Knife"
         compositeDisposable.add(
-            apiService.pullAlltheIssues(repoName,App.getAPIToken(),App.getMediaType(),params.key,params.requestedLoadSize)
+            apiService.pullAlltheRepos(App.getAPIToken(),
+                App.getMediaType(),params.key,params.requestedLoadSize)
                 .subscribe(
                     { response ->
 
-                        Log.d("abc", response.toString())
+                        Log.d("abcd", response.toString())
                         callback.onResult(response,
                             params.key+1
                         )
@@ -67,7 +64,7 @@ class GitIssueDataSource(private val apiService: RemoteApiService,
 
     override fun loadBefore(
         params: LoadParams<Int>,
-        callback: LoadCallback<Int, GitIssueResponse>
+        callback: LoadCallback<Int, GitRepoResponse>
     ) {
     }
 

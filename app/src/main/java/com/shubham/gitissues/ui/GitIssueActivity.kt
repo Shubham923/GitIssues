@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.shubham.gitissues.R
+import com.shubham.gitissues.app.App
 import com.shubham.gitissues.model.GitIssues.GitIssue
 import com.shubham.gitissues.model.State
 import com.shubham.gitissues.viewmodel.AllGitIssuesViewModel
@@ -43,7 +44,7 @@ class GitIssueActivity : AppCompatActivity() {
         Log.d("EXE","EXE")
        // GitIssueStore.fetchGitIssues(applicationContext)
         adapter = GitIssueAdapter{ viewModel.retry()}
-        val repoName : String? = intent.getStringExtra("REPOSITORY_NAME")
+        val repoName : String? = /*intent.getStringExtra("REPOSITORY_NAME")*/ App.getRepositoryName()
         viewModel = ViewModelProviders.of(this).get(AllGitIssuesViewModel :: class.java)
         gitIssuesRecyclerView.layoutManager = LinearLayoutManager(this)
         gitIssuesRecyclerView.adapter = adapter

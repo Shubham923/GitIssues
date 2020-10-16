@@ -15,7 +15,7 @@ interface RemoteApiService {
 
     @GET("/repos/octocat/{repository}/issues")
     fun pullAlltheIssues(
-        @Path("repository")repoName: String,
+        @Path("repository")repoName: String?,
         @Header("Authorization") token : String,
         @Header("Accept") mediaType : String,
         @Query("page") page : Int,
@@ -23,5 +23,7 @@ interface RemoteApiService {
 
     @GET("/users/octocat/repos")
     fun pullAlltheRepos(@Header("Authorization") token : String,
-                         @Header("Accept") mediaType : String) : Call<List<GitRepoResponse>>
+                         @Header("Accept") mediaType : String,
+                        @Query("page") page : Int,
+                        @Query("per_page")per_page : Int): Single<List<GitRepoResponse>>
 }

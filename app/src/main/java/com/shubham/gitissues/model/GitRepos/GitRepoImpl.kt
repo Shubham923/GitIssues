@@ -14,9 +14,6 @@ class GitRepoImpl : GitRepo {
     init {
         //GitIssueStore.fetchGitIssues()
         var remoteApi = App.remoteApi
-        remoteApi.pullAlltheRepos { tasks, error ->
-            allGitRepos.value = tasks
-        }
 
         //allGitIssues = GitIssueStore.getGitIssues()
     }

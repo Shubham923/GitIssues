@@ -47,7 +47,7 @@ class RemoteApi(private val apiService: RemoteApiService) {
   */
 
 
-    fun pullAlltheRepos (onResponseReceived : (List<GitRepoResponse>, Throwable?) -> Unit) {
+  /*  fun pullAlltheRepos (onResponseReceived : (List<GitRepoResponse>, Throwable?) -> Unit) {
         apiService.pullAlltheRepos(App.getAPIToken(), App.getMediaType()).enqueue(object :
             Callback<List<GitRepoResponse>> {
             override fun onFailure(call: Call<List<GitRepoResponse>>, t: Throwable) {
@@ -75,6 +75,6 @@ class RemoteApi(private val apiService: RemoteApiService) {
             }
 
         })
-    }
+    }*/
 
 }

@@ -9,34 +9,42 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.shubham.gitissues.R
+import com.shubham.gitissues.app.App
+import com.shubham.gitissues.model.State
+import com.shubham.gitissues.viewmodel.AllGitIssuesViewModel
 import com.shubham.gitissues.viewmodel.AllGitReposViewModel
 import kotlinx.android.synthetic.main.content_all_gitissues.*
 
 class GitRepoActivity : AppCompatActivity() {
-    private lateinit var viewModel : AllGitReposViewModel
-    private val adapter = GitRepoAdapter(mutableListOf())
+    private lateinit var viewModel: AllGitReposViewModel
+    private lateinit var adapter : GitRepoAdapter
 
     companion object {
-        fun switchIntent(context : Context, repoName : String?) : Intent {
+        fun switchIntent(context: Context, repoName: String?): Intent {
             val intent = Intent(context, GitIssueActivity::class.java)   //here change is needed
             //val gitIssueFragment = GitIssueFragment()
+            App.setRepositoryName(repoName)
+          //  Log.d("Checking RepoName", App.getRepositoryName().toString())
             intent.putExtra("REPOSITORY_NAME", repoName)
             return intent
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_git_repo)
-        viewModel = ViewModelProviders.of(this).get(AllGitReposViewModel :: class.java)
+        adapter = GitRepoAdapter { viewModel.retry() }
+        //val repoName: String? = intent.getStringExtra("REPOSITORY_NAME")
+        viewModel = ViewModelProviders.of(this).get(AllGitReposViewModel::class.java)
         gitIssuesRecyclerView.layoutManager = LinearLayoutManager(this)
         gitIssuesRecyclerView.adapter = adapter
-        viewModel.getAllReposLiveData().observe(this, Observer { gitRepos ->
-            gitRepos?.let {
-                Log.d("GITREPOACTIVITY", it[1].title.toString())
-                adapter.updateGitIssues(gitRepos)
-            }
+        viewModel.repoList.observe(this, Observer {
+                //adapter.updateGitIssues(gitIssues)
+                // Log.d("List", it[0]?.title.toString())
+                adapter.submitList(it)
         })
+
+        //adapter.setState(State.DONE)
+
     }
-
-
 }

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">GitIssues</string>
+    <string name="icon_in_list">ICONS</string>
+    <string name="content_description_header_image">Icon</string>
+</resources>

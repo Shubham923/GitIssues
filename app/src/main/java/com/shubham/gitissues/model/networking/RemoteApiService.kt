@@ -1,5 +1,6 @@
 package com.shubham.gitissues.model.networking
 
+import com.shubham.gitissues.app.App
 import com.shubham.gitissues.model.response.GitIssueResponse
 import com.shubham.gitissues.model.response.GitRepoResponse
 import com.shubham.gitissues.model.response.Response
@@ -21,9 +22,10 @@ interface RemoteApiService {
         @Query("page") page : Int,
     @Query("per_page")per_page : Int) : /*Call<List<GitIssueResponse>>*/ Single<List<GitIssueResponse>>
 
-    @GET("/users/octocat/repos")
-    fun pullAlltheRepos(@Header("Authorization") token : String,
-                         @Header("Accept") mediaType : String,
+    @GET("/users/{user_name}/repos")
+    fun pullAlltheRepos(@Path("user_name") userName: String? ,
+                        @Header("Authorization") token : String,
+                        @Header("Accept") mediaType : String,
                         @Query("page") page : Int,
                         @Query("per_page")per_page : Int): Single<List<GitRepoResponse>>
 }

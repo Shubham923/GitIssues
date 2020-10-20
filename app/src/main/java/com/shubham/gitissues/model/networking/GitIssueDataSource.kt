@@ -46,7 +46,7 @@ class GitIssueDataSource(private val apiService: RemoteApiService,
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, GitIssueResponse>) {
 
-        val repoName = /*App.getRepositoryName()*/ "git-consortium"
+        val repoName = /*App.getRepositoryName()*/ App.getRepositoryName()
         compositeDisposable.add(
             apiService.pullAlltheIssues(repoName,App.getAPIToken(),App.getMediaType(),params.key,params.requestedLoadSize)
                 .subscribe(

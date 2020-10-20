@@ -16,7 +16,7 @@ class SplashscreenActivity : AppCompatActivity() {
 
         Handler().postDelayed(Runnable { // This method will be executed once the timer is over
             // Start your app main activity
-            val i = Intent(this@SplashscreenActivity, GitRepoActivity::class.java)
+            val i = Intent(this@SplashscreenActivity, SearchActivity::class.java)
             startActivity(i)
 
             // close this activity

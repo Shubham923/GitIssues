@@ -17,6 +17,8 @@ class App : Application(){
         fun getMediaType() = MEDIA_TYPE
 
         var repoName : String? = null
+        var userName : String? = null
+
 
         fun getRepositoryName() :String? {
             return repoName

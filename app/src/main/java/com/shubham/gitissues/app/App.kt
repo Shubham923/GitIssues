@@ -2,10 +2,11 @@ package com.shubham.gitissues.app
 
 import android.app.Application
 import android.util.Log
+import com.shubham.gitissues.model.GitIssues.GitIssue
 import com.shubham.gitissues.model.networking.RemoteApi
 import com.shubham.gitissues.model.networking.buildApiService
 
-private val API_TOKEN = "14b96a5d51509dc3a3b5dff8bc24ed5f8a67c64b"
+private val API_TOKEN = "ee843853e5265d6081210dcb8f04efe5f05b4906"
 private val MEDIA_TYPE = "application/vnd.github.v3+json"
 class App : Application(){
 
@@ -18,6 +19,7 @@ class App : Application(){
 
         var repoName : String? = null
         var userName : String? = null
+        var gitIssueDescription : GitIssue? = null
 
 
         fun getRepositoryName() :String? {
@@ -28,6 +30,8 @@ class App : Application(){
 
             repoName = str
         }
+
+
 
         val apiService by lazy { buildApiService() }
 

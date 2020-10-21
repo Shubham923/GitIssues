@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import com.shubham.gitissues.R
-import com.shubham.gitissues.app.MainActivity
+import com.shubham.gitissues.ui.fragments.SearchFragment
 
 
 class SplashscreenActivity : AppCompatActivity() {
@@ -18,6 +18,9 @@ class SplashscreenActivity : AppCompatActivity() {
             // Start your app main activity
             val i = Intent(this@SplashscreenActivity, SearchActivity::class.java)
             startActivity(i)
+
+           // var fr = supportFragmentManager.beginTransaction()
+          //  fr.replace(R.id.fragment_search_id, SearchFragment())
 
             // close this activity
             finish()

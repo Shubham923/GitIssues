@@ -43,7 +43,7 @@ class GitIssueActivity : AppCompatActivity() {
 
         Log.d("EXE","EXE")
        // GitIssueStore.fetchGitIssues(applicationContext)
-        adapter = GitIssueAdapter{ viewModel.retry()}
+       // adapter = GitIssueAdapter{ viewModel.retry()}
         val repoName : String? = /*intent.getStringExtra("REPOSITORY_NAME")*/ App.getRepositoryName()
         viewModel = ViewModelProviders.of(this).get(AllGitIssuesViewModel :: class.java)
         gitIssuesRecyclerView.layoutManager = LinearLayoutManager(this)

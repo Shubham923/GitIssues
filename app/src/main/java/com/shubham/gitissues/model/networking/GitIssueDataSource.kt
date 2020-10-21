@@ -27,7 +27,7 @@ class GitIssueDataSource(private val apiService: RemoteApiService,
             Log.d("xyz-called", repoName)
         }
         compositeDisposable.add(
-            apiService.pullAlltheIssues(repoName,App.getAPIToken(),App.getMediaType(),1,params.requestedLoadSize)
+            apiService.pullAlltheIssues(repoName,App.getAPIToken()+" OAUTH-TOKEN",App.getMediaType(),1,params.requestedLoadSize)
                 .subscribe(
                     { response ->
 
@@ -48,7 +48,7 @@ class GitIssueDataSource(private val apiService: RemoteApiService,
 
         val repoName = /*App.getRepositoryName()*/ App.getRepositoryName()
         compositeDisposable.add(
-            apiService.pullAlltheIssues(repoName,App.getAPIToken(),App.getMediaType(),params.key,params.requestedLoadSize)
+            apiService.pullAlltheIssues(repoName,App.getAPIToken()+" OAUTH-TOKEN",App.getMediaType(),params.key,params.requestedLoadSize)
                 .subscribe(
                     { response ->
 

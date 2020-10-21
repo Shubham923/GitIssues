@@ -20,8 +20,8 @@ import java.lang.Exception
 import java.net.URL
 
 
-class GitIssueAdapter(private val retry: ()-> Unit)
-    : PagedListAdapter<GitIssueResponse,RecyclerView.ViewHolder>(NewsDiffCallback){
+class GitIssueAdapter(val listner : ContentListenerForIssues)
+    : PagedListAdapter<GitIssueResponse,RecyclerView.ViewHolder>(NewsDiffCallback) {
 
     private var state = State.LOADING
 
@@ -29,13 +29,13 @@ class GitIssueAdapter(private val retry: ()-> Unit)
         return ViewHolder(parent.inflate(R.layout.list_item_gitissue))
     }
 
-    override fun getItemCount() : Int {
+    override fun getItemCount(): Int {
         return super.getItemCount()
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         //holder.bind(gitIssues[position])
-        getItem(position)?.let { (holder as ViewHolder).bind(it) }
+        getItem(position)?.let { (holder as ViewHolder).bind(it, listner) }
     }
 
     /*fun updateGitIssues(gitIssues: List<GitIssueResponse>) {
@@ -46,47 +46,57 @@ class GitIssueAdapter(private val retry: ()-> Unit)
 
     companion object {
         val NewsDiffCallback = object : DiffUtil.ItemCallback<GitIssueResponse>() {
-            override fun areItemsTheSame(oldItem: GitIssueResponse, newItem: GitIssueResponse): Boolean {
+            override fun areItemsTheSame(
+                oldItem: GitIssueResponse,
+                newItem: GitIssueResponse
+            ): Boolean {
                 return oldItem.title == newItem.title
             }
 
-            override fun areContentsTheSame(oldItem: GitIssueResponse, newItem: GitIssueResponse): Boolean {
+            override fun areContentsTheSame(
+                oldItem: GitIssueResponse,
+                newItem: GitIssueResponse
+            ): Boolean {
                 return oldItem == newItem
             }
         }
     }
 
-    fun setState(state : State) {
+    fun setState(state: State) {
         this.state = state
         notifyItemChanged(super.getItemCount())
     }
 
-    class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private lateinit var gitIssue: GitIssueResponse
 
-        init {
-            itemView.setOnClickListener(this)
-        }
+//        init {
+//            itemView.setOnClickListener(this)
+//        }
 
-        fun bind(x: GitIssueResponse) {
-            gitIssue = x
-            itemView.title.text = x.title
-            GlobalScope.launch(context = Dispatchers.IO) {
-                try {
+            fun bind(x: GitIssueResponse, listner: ContentListenerForIssues) {
+                gitIssue = x
+                itemView.title.text = x.title
+                GlobalScope.launch(context = Dispatchers.IO) {
+                    try {
 
-                    val iss: InputStream =
-                        URL(x.user?.avatar_url.toString()).getContent() as InputStream
-                    val d = Drawable.createFromStream(iss, "src name")
-                    launch(Dispatchers.Main) {
-                        itemView.avatarListItem.setImageDrawable(d)
+                        val iss: InputStream =
+                            URL(x.user?.avatar_url.toString()).getContent() as InputStream
+                        val d = Drawable.createFromStream(iss, "src name")
+                        launch(Dispatchers.Main) {
+                            itemView.avatarListItem.setImageDrawable(d)
+                        }
+                    } catch (e: Exception) {
+                        itemView.avatarListItem.setImageResource(R.drawable.list_icons)
                     }
-                } catch (e : Exception) {
-                    itemView.avatarListItem.setImageResource(R.drawable.list_icons)
+                }
+
+                itemView.setOnClickListener {
+                    listner.onItemClicked(x)
                 }
             }
-        }
 
-        override fun onClick(v: View?) {
+            /*override fun onClick(v: View?) {
 
             v?.let {
                 val context = it.context
@@ -99,7 +109,15 @@ class GitIssueAdapter(private val retry: ()-> Unit)
                 )
                 context.startActivity(intent)
             }
+        }*/
         }
+
+    public interface ContentListenerForIssues {
+
+        fun onItemClicked(x: GitIssueResponse)
     }
 
-}
+    }
+
+
+

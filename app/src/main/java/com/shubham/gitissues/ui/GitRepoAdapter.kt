@@ -1,6 +1,7 @@
 package com.shubham.gitissues.ui
 
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
@@ -21,10 +22,11 @@ import java.io.InputStream
 import java.lang.Exception
 import java.net.URL
 
-class GitRepoAdapter(private val retry: ()-> Unit)
+class GitRepoAdapter(/*private val retry: ()-> Unit*/val listener: ContentListener)
     : PagedListAdapter<GitRepoResponse, RecyclerView.ViewHolder>(NewsDiffCallback){
 
     private var state = State.LOADING
+    //lateinit var listener: ContentListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(parent.inflate(R.layout.list_item_gitissue))
@@ -36,7 +38,7 @@ class GitRepoAdapter(private val retry: ()-> Unit)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         //holder.bind(gitIssues[position])
-        getItem(position)?.let { (holder as ViewHolder).bind(it) }
+        getItem(position)?.let { (holder as ViewHolder).bind(it,listener) }
     }
 
     /*fun updateGitIssues(gitIssues: List<GitIssueResponse>) {
@@ -62,14 +64,14 @@ class GitRepoAdapter(private val retry: ()-> Unit)
         notifyItemChanged(super.getItemCount())
     }
 
-    class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
         private lateinit var gitRepo: GitRepoResponse
 
-        init {
-            itemView.setOnClickListener(this)
-        }
+//        init {
+//            itemView.setOnClickListener(this)
+//        }
 
-        fun bind(x: GitRepoResponse) {
+        fun bind(x: GitRepoResponse, listener : ContentListener) {
             gitRepo = x
             itemView.title.text = x.title
             GlobalScope.launch(context = Dispatchers.IO) {
@@ -85,9 +87,14 @@ class GitRepoAdapter(private val retry: ()-> Unit)
                     itemView.avatarListItem.setImageResource(R.drawable.list_icons)
                 }
             }
+
+            itemView.setOnClickListener {
+                listener.onItemClicked(x)
+                Log.d("This Exe", "Exe")
+            }
         }
 
-        override fun onClick(v: View?) {
+        /*override fun onClick(v: View?) {
 
             v?.let {
                 val context = it.context
@@ -96,7 +103,11 @@ class GitRepoAdapter(private val retry: ()-> Unit)
                 )
                 context.startActivity(intent)
             }
-        }
+        }*/
+    }
+
+    public interface ContentListener {
+        fun onItemClicked(x: GitRepoResponse)
     }
 
 }

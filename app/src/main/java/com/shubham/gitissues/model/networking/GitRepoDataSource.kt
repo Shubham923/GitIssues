@@ -22,7 +22,7 @@ class GitRepoDataSource(private val apiService: RemoteApiService,
     ) {
         Log.d("xyz", "I am Called")
         compositeDisposable.add(
-            apiService.pullAlltheRepos(App.userName, App.getAPIToken(), App.getMediaType(),1,params.requestedLoadSize)
+            apiService.pullAlltheRepos(App.userName, App.getAPIToken()+" OAUTH-TOKEN", App.getMediaType(),1,params.requestedLoadSize)
                 .subscribe(
                     { response ->
 
@@ -44,7 +44,7 @@ class GitRepoDataSource(private val apiService: RemoteApiService,
 
         val repoName = "Spoon-Knife"
         compositeDisposable.add(
-            apiService.pullAlltheRepos(App.userName, App.getAPIToken(),
+            apiService.pullAlltheRepos(App.userName, App.getAPIToken()+" OAUTH-TOKEN",
                 App.getMediaType(),params.key,params.requestedLoadSize)
                 .subscribe(
                     { response ->

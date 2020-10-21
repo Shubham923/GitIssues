@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import com.shubham.gitissues.R
 import com.shubham.gitissues.app.App
+import com.shubham.gitissues.ui.fragments.SearchFragment
 import kotlinx.android.synthetic.main.activity_search.*
 
 class SearchActivity : AppCompatActivity() {
@@ -16,17 +17,15 @@ class SearchActivity : AppCompatActivity() {
         setContentView(R.layout.activity_search)
 
 
-        search_button.setOnClickListener(object :View.OnClickListener{
-            override fun onClick(v: View?) {
+               // App.userName = searchByName.text.toString()
 
-                App.userName = searchByName.text.toString()
+               // val intent = Intent(this@SearchActivity, GitRepoActivity::class.java)
+               // startActivity(intent)
 
-                val intent = Intent(this@SearchActivity, GitRepoActivity::class.java)
-                startActivity(intent)
+                var fr = supportFragmentManager.beginTransaction()
+                fr.replace(R.id.root_layout, SearchFragment.newInstance()).commit()
 
-            }
 
-        } )
 
 
     }
